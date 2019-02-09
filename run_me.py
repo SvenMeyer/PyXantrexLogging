@@ -27,11 +27,11 @@ try:
 
 	else:
 		print ("Incorrect argument has been entered. The following arguments are accepted:")
-		print
-		print "--daily_summary"
-		print "--live"
-		print
-		print "Please enter an accepted argument for this script to run correctly"
+		print()
+		print("--daily_summary")
+		print("--live")
+		print()
+		print("Please enter an accepted argument for this script to run correctly")
 
 except IndexError:
 	print ("Script failed. Nothing has been run")

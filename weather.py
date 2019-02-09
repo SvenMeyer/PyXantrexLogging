@@ -7,8 +7,8 @@ min_temp = ''
 max_temp = ''
 
 #OpenweatherMap Settings
-owm_api = '######' #http://openweathermap.org/appid#get
-owm_cityid = '######' #Search for city ID here: http://openweathermap.org/help/city_list.txt. ID is the first column
+owm_api = 'e20a5ac3dc0f2a1c6f00a83ff9ce64e9' #http://openweathermap.org/appid#get
+owm_cityid = '2172880' #Search for city and use number in result URL
 owm_unit = 'metric' #metric or imperial
 
 #Open Weather Map API URL
@@ -17,4 +17,6 @@ weatherURL = feedparser.parse ('http://api.openweathermap.org/data/2.5/weather?i
 #Get Yahoo Weather Code, min temp, max temp and weather text summary
 min_temp = weatherURL.feed.temperature.get('min')
 max_temp = weatherURL.feed.temperature.get('max')
+print("get weather forecast ...")
 forecast_text = weatherURL.feed.weather.get('value')
+print(forecast_text)

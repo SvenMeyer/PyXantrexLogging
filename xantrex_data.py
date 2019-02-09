@@ -1,14 +1,17 @@
 #!/usr/bin/python
-from __future__ import division
+
 import serial
 import os
 from datetime import datetime, date, time
 
-dir_path = os.path.dirname(os.path.abspath(__file__))
+# dir_path = os.path.dirname(os.path.abspath(__file__))
+# dir_path = os.path.abspath("~/solardata")
+dir_path = os.path.abspath("/home/pi/solardata/")
+print(("dir_path = ", dir_path))
 
 #Save Date and Time into variables
-date = datetime.now().strftime("%Y%m%d")
-time = datetime.now().strftime("%H:%M")
+date_now = datetime.now().strftime("%Y-%m-%d")
+time_now = datetime.now().strftime("%H:%M:%S")
 
 #Create serial connection
 s = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
@@ -40,18 +43,40 @@ def myreadline(s):
   res = ""
   while 1:
     c = s.read()
-    if (c == '\r'): return res
-    res += c
+    # convert byte to UTF8
+    u = c.decode()
+    if (u == '\r'): return res
+    res += u
 
 for query in queries:
-      s.write(query + "?\r")
-      response = myreadline(s)
-      # print query + ": " + response
-      exec '%s=response' % query
-
+  # encode to bytes before sending over serial
+  s.write(str.encode(query + "?\r"))
+  response = myreadline(s)
+  exec('%s=response' % query)
+      
 #Modify some of the returned values to get what we want to upload.
 MEASTEMP = extract_between(MEASTEMP,':',' ')
 KWHTODAY = '{0:g}'.format(float(KWHTODAY)*1000)
+
+daily_file = open(os.path.join(dir_path, "CumbalumXantrex_" + date_now + ".tsv"),"a+")
+
+daily_file.write(date_now + '\t')
+daily_file.write(time_now + '\t')
+daily_file.write(VIN  + '\t')
+daily_file.write(IIN      + '\t')
+daily_file.write(PIN  + '\t')
+daily_file.write(VOUT + '\t')
+daily_file.write(POUT + '\t')
+daily_file.write(KWHTODAY + '\t')
+daily_file.write(KWHLIFE  + '\t')
+daily_file.write(TIME + '\t')
+daily_file.write(MEASTEMP +    '\t')
+daily_file.write(DERATELIMIT + '\t')
+daily_file.write(TEMPLIMIT +   '\n')
+
+
+
+daily_file.close()
 
 # #Get Inverter Efficiency
 # try:
@@ -70,8 +95,8 @@ aDate = line_split[1]
 aTime = line_split[2]
 file.close
 
-if int(POUT) > int(power) or date > aDate:
+if int(POUT) > int(power) or date_now > aDate:
 	file = open(os.path.join(dir_path, "MaxPower.txt"),"w")
-	file.write(POUT + "," + date + "," + time)
+	file.write(POUT + "," + date_now + "," + time_now)
 
 file.close
