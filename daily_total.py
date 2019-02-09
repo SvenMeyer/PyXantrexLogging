@@ -1,9 +1,11 @@
 #!/usr/bin/python
 import os
 
+from pvoutput_config import DATA_DIR
+
 # dir_path = os.path.dirname(os.path.abspath(__file__))
-# dir_path = os.path.abspath("~/solardata")
-dir_path = os.path.abspath("/home/pi/solardata/")
+
+dir_path = DATA_DIR
 
 # Open Max Power to get Peak Power value and time
 file = open(os.path.join(dir_path, "MaxPower.txt"),"r")

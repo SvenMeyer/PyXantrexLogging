@@ -4,9 +4,11 @@ import serial
 import os
 from datetime import datetime, date, time
 
+from pvoutput_config import DATA_DIR
+
 # dir_path = os.path.dirname(os.path.abspath(__file__))
 # dir_path = os.path.abspath("~/solardata")
-dir_path = os.path.abspath("/home/pi/solardata/")
+dir_path = DATA_DIR
 print(("dir_path = ", dir_path))
 
 #Save Date and Time into variables
